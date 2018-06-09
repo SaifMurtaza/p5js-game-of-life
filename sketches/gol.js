@@ -7,10 +7,10 @@ function setup () {
 
 function draw () {
   background(250);
-  
+
   // grid.draw();
 }
-
+//change
 class Grid {
   constructor () {
     // update the contructor to take cellSize as a parameter
@@ -20,7 +20,7 @@ class Grid {
   draw () {
     for (var column = 0; column < this.numberOfColumns; column ++) {
       for (var row = 0; row < this.numberOfRows; row++) {
-        fill(240); 
+        fill(240);
         noStroke();
         rect(column * this.cellSize + 1, row * this.cellSize + 1, this.cellSize - 1, this.cellSize - 1);
       }
