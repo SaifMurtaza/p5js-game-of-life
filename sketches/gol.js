@@ -1,41 +1,111 @@
 var grid;
+
 var song;
-var button;
+var buttonMusic, buttonGame, buttonReset;
+var input, submitNameButton, greeting;
+var bgcolor;
+
+var slider;
+var frame;
+var greetingSlider;
+
 
 function setup () {
   createCanvas(400, 400);
+  bgcolor = color(200);
+
+  frame = 10
+  frameRate(frame);
+
   song = loadSound("1985.mp3",loaded);
-  button = createButton("play some dope music");
-  button.mousePressed(togglePlaying); // add something with && for another function
+
+  buttonMusic = createButton("Play some dope MUSIC");
+  buttonMusic.mousePressed(toggleMusicPlaying); // add something with && for another function
+  buttonMusic.position(40,675)
+
+  buttonGame = createButton("STOP! the game");
+  buttonGame.mousePressed(toggleGameStop);
+  buttonGame.position(40,650)
+
+  buttonReset = createButton("Reset Game");
+  buttonReset.mousePressed(resetSketch)
+  buttonReset.position(40,700)
+
+  input = createInput();
+  input.position(40, 600);
+  submitNameButton = createButton('submit');
+  submitNameButton.position(input.x + input.width, 600);
+  submitNameButton.mousePressed(greet);
+  greeting = createElement('h2', 'what is your name?');
+  greeting.position(40, 550);
+
+  slider = createSlider(10, 30, 0);
+  slider.position(40, 775);
+  greetingSlider = createElement('h3', 'Control the speed of the game');
+  greetingSlider.position(40, 725);
+  //slider.value(frame)
+
   grid = new Grid(20);
   grid.randomize();
 
 }
 
 function loaded() {
-  console.log("loaded");
+  console.log("song loaded");
 }
 
-function togglePlaying() {
+function toggleMusicPlaying() {
   if (!song.isPlaying()) {
     song.play();
     song.setVolume(0.8);
-    button.html("stop this nonsense");
+    buttonMusic.html("stop this nonsense");
   } else {
     song.pause();
-    button.html("play music again")
+    buttonMusic.html("play music again")
   }
 }
 
+function toggleGameStop() {
+  //pause updateNeighborCount
+  //pause updatePopulation
+  //stop/start calling functions
+  //noLoop() since redraw() no viable
+  if (buttonGame.mousePressed){
+    frame = 0
+    frameRate(frame);
+  }
+    //noLoop();
+  // } else if (noloop() && buttonGame.mousePressed) {
+  //   redraw();
+  // }
+}
+
+function greet() {
+  var name = input.value();
+  greeting.html('Hi ' +name+'!');
+  bgcolor = color(random(255));
+
+}
+
+function resetSketch() {
+  frame = 10;
+  frameRate(frame);
+  grid = new Grid(20);
+  grid.randomize();
+}
 
 function draw() {
-  background(250);
+  background(bgcolor);
+
+  var r = slider.value();
+  frameRate(r);
 
   grid.updateNeighborCount();
   grid.updatePopulation();
   grid.draw();
 
 }
+
 
 class Cell {
   constructor (column, row, cellSize) {
